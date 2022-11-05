@@ -1,6 +1,6 @@
 export default class ReceiveWebhookDto {
   destination: string;
-  events: Events
+  events: Events;
 }
 
 class Events {

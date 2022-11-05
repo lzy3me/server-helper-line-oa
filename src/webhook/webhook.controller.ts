@@ -1,8 +1,8 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { WebhookService } from './webhook.service';
-import ReceiveWebhookDto from './dto/receive-webhook.dto';
+import { Controller, Post, Body } from "@nestjs/common";
+import { WebhookService } from "./webhook.service";
+import ReceiveWebhookDto from "./dto/receive-webhook.dto";
 
-@Controller('webhook')
+@Controller("webhook")
 export class WebhookController {
   constructor(private readonly webhookService: WebhookService) {}
 
