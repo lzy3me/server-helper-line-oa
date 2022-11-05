@@ -6,6 +6,6 @@ async function bootstrap() {
 
   app.setGlobalPrefix("/825LWPpNpw/api/line")
 
-  await app.listen(3000);
+  await app.listen(6969);
 }
 bootstrap();
