@@ -27,9 +27,9 @@ export class WebhookService {
   }
 
   receiving(body: ReceiveWebhookDto) {
-    // const channelSecret = process.env.LINE_CHANNEL_SECRET;
-
     console.log(body);
+
+    
     
     return { success: true };
   }
