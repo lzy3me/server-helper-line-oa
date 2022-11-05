@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateWebhookDto } from './dto/create-webhook.dto';
 import { UpdateWebhookDto } from './dto/update-webhook.dto';
 import * as crypto from 'crypto';
+import ReceiveWebhookDto from './dto/receive-webhook.dto';
 
 @Injectable()
 export class WebhookService {
@@ -25,7 +26,7 @@ export class WebhookService {
     return `This action removes a #${id} webhook`;
   }
 
-  receiving(body: any) {
+  receiving(body: ReceiveWebhookDto) {
     // const channelSecret = process.env.LINE_CHANNEL_SECRET;
 
     console.log(body);
