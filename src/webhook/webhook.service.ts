@@ -1,18 +1,20 @@
 import { Injectable } from "@nestjs/common";
 import { Client as LineClient } from "@line/bot-sdk";
 import ReceiveWebhookDto from "./dto/receive-webhook.dto";
-import getConfig from "../configuration/configuration";
-
-const config = getConfig();
-
-console.log(config);
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class WebhookService {
+  constructor(
+    private configService: ConfigService,
+  ) {
+    this.configService.get<string>("configuration.channelSecret");
+  }
+
   receiving(body: ReceiveWebhookDto) {
     console.log(body);
     const client = new LineClient({
-      channelAccessToken: config.channelSecret,
+      channelAccessToken: this.configService.get<string>("configuration.channelSecret"),
     });
 
     client.replyMessage(body.events.replyToken, {
