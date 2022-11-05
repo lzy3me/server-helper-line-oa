@@ -5,11 +5,24 @@ export default class ReceiveWebhookDto {
 
 class Events {
   type: string;
-  message: any;
+  message: Message;
   webhookEventId: string;
-  deliveryContext: any;
+  deliveryContext: {
+    isRedelivery: boolean;
+  };
   timestamp: string;
-  source: any;
+  source: Source;
   replyToken: string;
   mode: string;
+}
+
+class Message {
+  type: string;
+  id: string;
+  text: string;
+}
+
+class Source {
+  type: string;
+  userId: string;
 }
