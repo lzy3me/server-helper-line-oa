@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { WebhookModule } from './webhook/webhook.module';
+import { ConfigurationModule } from './configuration/configuration.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), WebhookModule],
+  imports: [ConfigurationModule, WebhookModule],
   controllers: [AppController],
   providers: [AppService],
 })
