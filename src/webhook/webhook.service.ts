@@ -7,34 +7,52 @@ import { spawn } from "node:child_process";
 @Injectable()
 export class WebhookService {
   constructor(private configService: ConfigService) {
-    this.configService.get<string>("configuration.channelSecret");
   }
 
   receiving(body: ReceiveWebhookDto) {
-    console.log(body);
+    const { events } = body;
+    const { replyMessage, message } = events[0];
+    console.log("🚀 ~ file: webhook.service.ts ~ line 17 ~ WebhookService ~ receiving ~ replyMessage", replyMessage)
+    console.log("🚀 ~ file: webhook.service.ts ~ line 17 ~ WebhookService ~ receiving ~ message", message)
+
+    
     const client = new LineClient({
-      channelAccessToken: this.configService.get<string>(
-        "configuration.channelSecret",
-      ),
+      channelAccessToken: process.env.LINE_CHANNEL_TOKEN,
     });
 
-    client.replyMessage(body.events.replyToken, {
-      type: "text",
-      text: "##DEPLOY##",
-    });
+    switch(message.text) {
+      case "!deploy web":
+        console.log("Deploy web");
+        client.replyMessage(replyMessage, {
+          type: "text",
+          text: "##DEPLOY WEB##",
+        }).catch(err => {
+          console.error(err.originalError.response.data);
+        });
+        break;
 
-    const ls = spawn("ls", ["-lh", "/usr"]);
-    ls.stdout.on("data", (data) => {
-      console.log("stdout: ", data);
-    });
+      case "!deploy api1":
+        console.log("Deploy api1");
+        client.replyMessage(replyMessage, {
+          type: "text",
+          text: "##DEPLOY API v1##",
+        }).catch(err => {
+          console.error(err.originalError.response.data);
+        });
+        break;
 
-    ls.stderr.on("data", (data) => {
-      console.error("stderr: ", data);
-    });
-
-    ls.on("close", (code) => {
-      console.log("child process exited with code ", code);
-    })
+      case "!deploy api2":
+        console.log("Deploy api2");
+        client.replyMessage(replyMessage, {
+          type: "text",
+          text: "##DEPLOY API v2##",
+        }).catch(err => {
+          console.error(err.originalError.response.data);
+        });
+        break;
+      default:
+        break;
+    }
 
     return "okay";
   }
