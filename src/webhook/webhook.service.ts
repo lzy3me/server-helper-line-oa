@@ -11,8 +11,8 @@ export class WebhookService {
 
   receiving(body: ReceiveWebhookDto) {
     const { events } = body;
-    const { replyMessage, message } = events[0];
-    console.log("🚀 ~ file: webhook.service.ts ~ line 17 ~ WebhookService ~ receiving ~ replyMessage", replyMessage)
+    const { replyToken, message } = events[0];
+    console.log("🚀 ~ file: webhook.service.ts ~ line 17 ~ WebhookService ~ receiving ~ replyToken", replyToken)
     console.log("🚀 ~ file: webhook.service.ts ~ line 17 ~ WebhookService ~ receiving ~ message", message)
 
     
@@ -23,7 +23,7 @@ export class WebhookService {
     switch(message.text) {
       case "!deploy web":
         console.log("Deploy web");
-        client.replyMessage(replyMessage, {
+        client.replyMessage(replyToken, {
           type: "text",
           text: "##DEPLOY WEB##",
         }).catch(err => {
@@ -33,7 +33,7 @@ export class WebhookService {
 
       case "!deploy api1":
         console.log("Deploy api1");
-        client.replyMessage(replyMessage, {
+        client.replyMessage(replyToken, {
           type: "text",
           text: "##DEPLOY API v1##",
         }).catch(err => {
@@ -43,7 +43,7 @@ export class WebhookService {
 
       case "!deploy api2":
         console.log("Deploy api2");
-        client.replyMessage(replyMessage, {
+        client.replyMessage(replyToken, {
           type: "text",
           text: "##DEPLOY API v2##",
         }).catch(err => {
