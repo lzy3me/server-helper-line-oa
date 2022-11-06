@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Client as LineClient } from "@line/bot-sdk";
 import ReceiveWebhookDto from "./dto/receive-webhook.dto";
 import { ConfigService } from "@nestjs/config";
-import { spawn } from "node:child_process";
+import { exec } from "node:child_process";
 
 @Injectable()
 export class WebhookService {
@@ -20,40 +20,53 @@ export class WebhookService {
       channelAccessToken: process.env.LINE_CHANNEL_TOKEN,
     });
 
-    switch(message.text) {
-      case "!deploy web":
-        console.log("Deploy web");
+    const _command = this.command(message);
+
+    switch(_command[0]) {
+      case "!deploy":
+        if (_command[1] === "web")
+          exec("/root/deploy-web.sh");
+        else if (_command[1] === "api1")
+          exec("/root/deploy-api1.sh");
+        else if (_command[1] === "api2")
+          exec("/root/deploy-api2.sh");
+        else
+          break;
+
         client.replyMessage(replyToken, {
           type: "text",
-          text: "##DEPLOY WEB##",
+          text: `##DEPLOY ${_command[1].toUppercase()}##`,
         }).catch(err => {
           console.error(err.originalError.response.data);
         });
+
+        
         break;
 
-      case "!deploy api1":
-        console.log("Deploy api1");
+      case "!clean":
         client.replyMessage(replyToken, {
           type: "text",
-          text: "##DEPLOY API v1##",
+          text: "##CLEAN UNUSE IMAGES AND BUILD CACHE##",
         }).catch(err => {
           console.error(err.originalError.response.data);
         });
-        break;
 
-      case "!deploy api2":
-        console.log("Deploy api2");
-        client.replyMessage(replyToken, {
-          type: "text",
-          text: "##DEPLOY API v2##",
-        }).catch(err => {
-          console.error(err.originalError.response.data);
-        });
+        exec("docker image prune -a -f && docker builder prune -a -f");
         break;
+      
       default:
         break;
     }
 
     return "okay";
+  }
+
+  command(message: any) {
+    if (message.type === "text") {
+      if (message.text.includes("!")) {
+        return message.text.split(" ");
+      }
+    }
+    return null;
   }
 }
